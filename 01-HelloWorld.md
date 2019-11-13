@@ -4,14 +4,11 @@
 
 Workflow's cannot be edited directly on TERRA. They have to be created locally (or on HPC) then pushed to github, imported into dockstore and then into TERRA. There's probably other ways of doing it but this guide explains how to do it this way.
 
-# Related resources
-
-* [Lynn Langit's tutorials](https://github.com/lynnlangit/gcp-for-bioinformatics).
 
 # Tutorial
 
 1. Set up cromwell on local computer following [this guide](https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/)
-* The guide explains how to install cromwell, create a basic workflow and run it locally
+** The guide explains how to install cromwell, create a basic workflow and run it locally
 
 2. Create a github account if you don't have one already
 * Then create a repository
@@ -37,12 +34,71 @@ git push origin master
 * Under 'Workflow Path' enter the location of the workflow file. In my github repo it is in the root folder, so it is "/myWorkflow.wdl"
 * I did not create a test parameter file path
 * In the resulting page, click 'Publish'
+* Click 'View Public'
+
+5. Import into Terra and run
+* Under destination workspace, click 'Create a new workspace'
+* Click to import
+* Click 'Run Analysis'
+* Click 'launch'
+* You will see that the job is queued
+
+6. Understanding why the job failed
+* The job will not have worked! Eventually you will see a red exclamation mark under status.
+* Click on the job's name under submission
+* Click view
+* The error log will come up and should read '	Runtime validation failed (Caused by [reason 1 of 1]: Task myTask has an invalid runtime attribute docker = !! NOT FOUND !!)'
+* This is because the workflow doesn't call a docker image
+
+7. Adding docker to a workflow
+* Return to the directory on your local computer which has myWorkflow.wdl
+* vi myWorkflow.wdl
+* Edit to to the following then save:
+
+```
+task myTask {
+    command {
+        echo "hello world"
+    }
+    output {
+        String out = read_string(stdout())
+    }
+    runtime {
+        docker: "reshg/lunsss:v3"
+        bootDiskSizeGb:50
+    }
+}
+```
+
+* git add myWorkflow.wdl
+* git commit -m "adding docker call to workflow"
+* git push origin master
+
+8. Refresh on dockstore
+* Click on your name in top-right corner
+* Click 'My Workflows'
+* Click 'Refresh'
+* Check under the 'files' tab that the update is there
+
+9. Run on TERRA again
+* Go to app.terra.bio
+* Go to your workspaces, select the one where you previously imported the WDL
+* The workflow should have autoupdated (check the script)
+* Hit 'RUN'
 
 # Things which should be added in the next tutorial
 
-* Test parameter files
+* 'Test parameter files'
+* Add an argument to edit the output
+* Get the script to save a file
 * Using Combiz's single cell docker file on Imperial's cluster and on TERRA
 * Editing Combiz's single cell docker file
+* Launch with 'Terra'
+
+
+# Related resources
+
+* [Lynn Langit's tutorials](https://github.com/lynnlangit/gcp-for-bioinformatics).
 
 # Brief explanation of some terms/names you may encounter
 
