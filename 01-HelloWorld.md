@@ -99,6 +99,7 @@ task myTask {
 # Things which should be added in the next tutorial
 
 * 'Test parameter files'
+* Running WDL + Cromwell on Imperial's HPC
 * Add an argument to edit the output
 * Get the script to save a file
 * Using Combiz's single cell docker file on Imperial's cluster and on TERRA
