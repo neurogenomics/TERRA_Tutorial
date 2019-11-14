@@ -7,12 +7,22 @@ Workflow's cannot be edited directly on TERRA. They have to be created locally (
 
 # Tutorial
 
-1. Set up cromwell on local computer following [this guide](https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/)
-** The guide explains how to install cromwell, create a basic workflow and run it locally
+**1. Set up cromwell on local computer following [this guide](https://cromwell.readthedocs.io/en/stable/tutorials/FiveMinuteIntro/)**
+* The guide explains how to install cromwell, create a basic workflow and run it locally
 
-2. Create a github account if you don't have one already
+**2. Create a github account if you don't have one already**
 * Then create a repository
 * In the folder you used for the cromwell, and where your workflow script ('myWorkflow.wdl') is located, create a github repository using the instructions shown on github when you create a repo
+
+```
+echo "# WDLtest" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/neurogenomics/WDLtest.git
+git push -u origin master
+```
+
 * Add your workflow script to the repository and push to the repo
 
 ```
@@ -21,11 +31,11 @@ git commit -m "added basic workflow script"
 git push origin master
 ```
 
-3. Go to [dockstore](https://dockstore.org/) and login using your github account
+**3. Go to [dockstore](https://dockstore.org/) and login using your github account**
 * You will also need to link your google account so that you can login to TERRA. This is done through the [onboarding page](https://dockstore.org/onboarding)
 * Follow instructions on the onboarding page for installing Java 11, Docker and Dockerstore command line program
 
-4. Add your repository from github onto dockstore:
+**4. Add your repository from github onto dockstore:**
 * Click on your login name in top right corner of dockstore. Select 'My Workflows'
 * Click 'Register Workflow'
 * A popup window comes up. Select "Use CWL, WDL or Nextflow from GitHub, Bitbucket, etc" then press "Next"
@@ -36,21 +46,21 @@ git push origin master
 * In the resulting page, click 'Publish'
 * Click 'View Public'
 
-5. Import into Terra and run
+**5. Import into Terra and run**
 * Under destination workspace, click 'Create a new workspace'
 * Click to import
 * Click 'Run Analysis'
 * Click 'launch'
 * You will see that the job is queued
 
-6. Understanding why the job failed
+**6. Understanding why the job failed**
 * The job will not have worked! Eventually you will see a red exclamation mark under status.
 * Click on the job's name under submission
 * Click view
 * The error log will come up and should read '	Runtime validation failed (Caused by [reason 1 of 1]: Task myTask has an invalid runtime attribute docker = !! NOT FOUND !!)'
 * This is because the workflow doesn't call a docker image
 
-7. Adding docker to a workflow
+**7. Adding docker to a workflow**
 * Return to the directory on your local computer which has myWorkflow.wdl
 * vi myWorkflow.wdl
 * Edit to to the following then save:
@@ -74,13 +84,13 @@ task myTask {
 * git commit -m "adding docker call to workflow"
 * git push origin master
 
-8. Refresh on dockstore
+**8. Refresh on dockstore**
 * Click on your name in top-right corner
 * Click 'My Workflows'
 * Click 'Refresh'
 * Check under the 'files' tab that the update is there
 
-9. Run on TERRA again
+**9. Run on TERRA again**
 * Go to app.terra.bio
 * Go to your workspaces, select the one where you previously imported the WDL
 * The workflow should have autoupdated (check the script)
