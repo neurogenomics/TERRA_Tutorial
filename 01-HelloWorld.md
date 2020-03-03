@@ -106,6 +106,27 @@ task myTask {
 * Editing Combiz's single cell docker file
 * Launch with 'Terra'
 
+# Getting WDL scripts running on Imperial's cluster
+
+```
+pbspro {
+actor-factory = "cromwell.backend.impl.sfs.config.ConfigBackendLifecycleActorFactory"
+config {
+runtime-attributes = """
+Int cpu = 1
+Int? memory_gb
+String walltime = "24:00:00"
+"""
+submit = """
+qsub -V -l select=01:ncpus=08:mem=8gb -N ${job_name} -o ${out} -e ${err} -l walltime=${walltime} \
+-- /usr/bin/env bash ${script}
+"""
+kill = "qdel ${job_id}"
+check-alive = "qstat -f ${job_id}"
+job-id-regex = "(\\d+).*"
+}
+}
+```
 
 # Related resources
 
